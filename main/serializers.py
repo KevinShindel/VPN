@@ -1,25 +1,48 @@
 # REST FRAMEWORK
-from rest_framework import routers, serializers, viewsets
-from django.contrib.auth.models import User as AdminUser, Group as AdminGroup
-
+from rest_framework import serializers
+from .models import *
 
 # Serializers define the API representation.
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = AdminUser
-        fields = ('username', 'first_name', 'last_name',  'email')
+        model = User
+        fields = ('pk','first_name', 'last_name', 'email', 'company')
 
+    def add(self,data):
+        return User.objects.create(data)
 
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
+    def edit(self, instance, data):
+        instance.first_name = data.get('first_name',instance.first_name)
+        instance.last_name = data.get('last_name',instance.last_name)
+        instance.email = data.get('email',instance.email)
+        instance.company = data.get('company',instance.company)
+        instance.save()
+        return instance
+
+    def delete(self,instance,data):
+        instance.delete()
+        return instance
+        
+
+class CompanySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = AdminGroup
-        fields = ('name', 'permissions')
+        model = Company
+        fields = ('pk', 'name', 'quote')
 
+    def add(self,data):
+        return Company.objects.create(data)
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = AdminUser.objects.all()
-    serializer_class = UserSerializer
+    def edit(self, instance, data):
+        instance.name = data.get('name',instance.name)
+        instance.quote = data.get('quote',instance.quote)
+        instance.save()
+        return instance
 
+    def delete(self,instance,data):
+        instance.delete()
+        return instance
 
-router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
+class AbuseSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Transfer
+        fields = ('pk','user', 'date', 'resource', 'traffic')

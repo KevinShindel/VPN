@@ -52,15 +52,24 @@
         </tr>
       </thead>
       <tbody>
+        <form action="user/">
         {% for user in users %}
         <tr>
           <td>{{ user }}</td>
           <td>{{ user.email }}</td>
           <td>{{ user.company }}</td>
-          <th><button class='btn btn-outline-warning btn-sm'>Edit</button></th>
-          <th><button class='btn btn-outline-danger btn-sm'>Delete</button></th>
+          <th><button type='submit' value='edit'
+                      class='btn btn-outline-warning btn-sm'>Edit
+              </button>
+          </th>
+          <th>
+              <a href='{% url 'delete' user.id %}'
+                class='btn btn-outline-danger btn-sm'>Delete
+              </a>
+          </th>
         </tr>
         {% endfor %}
+      </form>
       </tbody>
       <tfoot>
         <tr class='text-muted'>

@@ -1,44 +1,21 @@
 from django.shortcuts import render
-from .models import User, Company, Transfer
+from .models import *
 from rest_framework import viewsets
-from django.contrib.auth.models import User as AdminUser, Group as AdminGroup
-from .serializers import UserSerializer,GroupSerializer
+from .serializers import *
 
-
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = AdminUser.objects.all()
-    serializer_class = UserSerializer
-
-
-class GroupViewSet(viewsets.ModelViewSet):
-    queryset = AdminGroup.objects.all()
-    serializer_class = GroupSerializer
-
-
+# Functions View
 def home(request):
     return render(request, 'index.html')
 
+#REST api end-poinst
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
-def user(request):
-    users = User.objects.all()
-    context = {
-        'users': users,
-    }
-    return render(request, 'user.html', context)
+class CompanyViewSet(viewsets.ModelViewSet):
+    queryset = Company.objects.all()
+    serializer_class = CompanySerializer
 
-
-def company(request):
-    companies = Company.objects.all()
-    context = {
-        'companies': companies
-    }
-    return render(request, 'company.html', context)
-
-
-def abusers(request):
-    logs = Transfer.objects.all()
-    context = {
-        'logs': logs
-    }
-    return render(request, 'abusers.html', context)
-
+class AbuseViewSet(viewsets.ModelViewSet):
+    queryset = Transfer.objects.all()
+    serializer_class = AbuseSerializer
