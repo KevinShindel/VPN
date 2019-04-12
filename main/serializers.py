@@ -9,6 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
+        company = serializers.SerializerMethodField()
         fields = ('id', 'first_name', 'last_name', 'email', 'company')
         datatables_always_serialize = ('id',)
 
@@ -27,5 +28,6 @@ class TransferSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Transfer
+        user = serializers.SerializerMethodField()
         fields = ('id', 'user', 'date', 'resource', 'traffic')
         datatables_always_serialize = ('id',)

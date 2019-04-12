@@ -22,8 +22,8 @@ class User(models.Model):
 class Transfer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
     date = models.DateTimeField(verbose_name='Time')
-    resource = models.CharField(max_length=240, verbose_name='Recource', default='http://xxxx.xxx/xx.xx')
+    resource = models.CharField(max_length=240, verbose_name='Resource', default='http://xxxx.xxx/xx.xx')
     traffic = models.IntegerField(verbose_name='Transfer')
 
-    # def __str__(self):
-    #     return self.user
+    def __str__(self):
+        return self.user.first_name

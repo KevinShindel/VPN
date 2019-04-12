@@ -1,28 +1,47 @@
 {% extends 'layout.html' %}
-{%  block content %}
-<div class="container rounded mt-4">
-  <table id='myTable' class='table table-striped'>
-    <thead>
-      <tr>
-          <th>User</th>
-          <th>Date</th>
-          <th>Resource</th>
-          <th>Traffic</th>
-      </tr>
-    </thead>
-    <tfoot>
-      <tr class='text-muted'> 
-          <th>User</th>
-          <th>Date</th>
-          <th>Resource</th>
-          <th>Traffic</th>
-      </tr>
-    </tfoot>
-  </table>
-  </div>
+{% block content %}
+    <div class="container rounded mt-4">
+        <table id='myTable' class='table table-striped'>
+            <thead>
+            <tr>
+                <th>User</th>
+                <th>Date</th>
+                <th>Resource</th>
+                <th>Traffic</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr class='text-muted'>
+                <th>User</th>
+                <th>Date</th>
+                <th>Resource</th>
+                <th>Traffic</th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
 
     <script>
         $(document).ready(function () {
+
+            var editor = new $.fn.dataTable.Editor({
+                ajax: '/api_auth/transfer/?format=datatables',
+                table: '#myTable',
+                dom: 'Bfrtip',
+                fields: [
+                    {label: 'User', name: 'user'},
+                    {label: 'Date', name: 'date'},
+                    {label: 'Resource', name: 'resource'},
+                    {label: 'Traffic', name: 'traffic'},
+                ],
+                select: true,
+                buttons: [
+                    {extend: 'create', editor: editor},
+                    {extend: 'edit', editor: editor},
+                    {extend: 'remove', editor: editor}
+                ]
+            });
+
             var table = $('#myTable').DataTable({
                 "serverSide": true,
                 "ajax": "/api_auth/transfer/?format=datatables",
@@ -35,4 +54,4 @@
             });
         });
     </script>
-{%  endblock %}
+{% endblock %}
