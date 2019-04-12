@@ -1,18 +1,21 @@
 {% extends 'layout.html' %}
 {%  block content %}
-
 <div class="container rounded mt-4">
   <table id='myTable' class='table table-striped'>
     <thead>
       <tr>
-      <th>Name</th>
-      <th>Quote</th>
+          <th>User</th>
+          <th>Date</th>
+          <th>Resource</th>
+          <th>Traffic</th>
       </tr>
     </thead>
     <tfoot>
       <tr class='text-muted'> 
-      <th>Name</th>
-      <th>Quote</th>
+          <th>User</th>
+          <th>Date</th>
+          <th>Resource</th>
+          <th>Traffic</th>
       </tr>
     </tfoot>
   </table>
@@ -22,13 +25,14 @@
         $(document).ready(function () {
             var table = $('#myTable').DataTable({
                 "serverSide": true,
-                "ajax": "/api_auth/company/?format=datatables",
+                "ajax": "/api_auth/transfer/?format=datatables",
                 "columns": [
-                    {"data": "name"},
-                    {"data": "quote"},
+                    {"data": "user"},
+                    {"data": "date"},
+                    {"data": "resource"},
+                    {"data": "traffic"},
                 ]
             });
         });
     </script>
-
 {%  endblock %}

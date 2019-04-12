@@ -22,5 +22,5 @@ urlpatterns = [
     path('transfer/', transfer, name='transfer'),
 
     # REST API URL
-    path('api/', include(router.urls)),
+    path('api_auth/', include(router.urls)),
 ]
