@@ -1,55 +1,53 @@
 {% extends 'layout.html' %}
 {% block content %}
-    <div class="container rounded mt-4">
-        <table id='myTable' class='table table-striped'>
-            <thead>
-            <tr>
-                <th>User</th>
-                <th>Date</th>
-                <th>Resource</th>
-                <th>Traffic</th>
-            </tr>
-            </thead>
-            <tfoot>
-            <tr class='text-muted'>
-                <th>User</th>
-                <th>Date</th>
-                <th>Resource</th>
-                <th>Traffic</th>
-            </tr>
-            </tfoot>
-        </table>
-    </div>
+    <table id='myTable' class='display table table-striped'>
+        <thead>
+        <tr>
+            <th>User</th>
+            <th>Date</th>
+            <th>Resource</th>
+            <th>Traffic</th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr class='text-muted'>
+            <th>User</th>
+            <th>Date</th>
+            <th>Resource</th>
+            <th>Traffic</th>
+        </tr>
+        </tfoot>
+    </table>
 
     <script>
         $(document).ready(function () {
-
-            var editor = new $.fn.dataTable.Editor({
-                ajax: '/api_auth/transfer/?format=datatables',
+            var editor;
+            editor = new $.fn.dataTable.Editor({
+                ajax: '/api_auth/transfer/',
                 table: '#myTable',
-                dom: 'Bfrtip',
                 fields: [
                     {label: 'User', name: 'user'},
                     {label: 'Date', name: 'date'},
                     {label: 'Resource', name: 'resource'},
                     {label: 'Traffic', name: 'traffic'},
-                ],
-                select: true,
-                buttons: [
-                    {extend: 'create', editor: editor},
-                    {extend: 'edit', editor: editor},
-                    {extend: 'remove', editor: editor}
                 ]
             });
 
             var table = $('#myTable').DataTable({
                 "serverSide": true,
                 "ajax": "/api_auth/transfer/?format=datatables",
+                dom: 'Bfrtip',
                 "columns": [
                     {"data": "user"},
                     {"data": "date"},
                     {"data": "resource"},
                     {"data": "traffic"},
+                ],
+                select: true,
+                buttons: [
+                    {extend: 'create', editor: editor},
+                    {extend: 'edit', editor: editor},
+                    {extend: 'remove', editor: editor}
                 ]
             });
         });
