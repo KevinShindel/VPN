@@ -22,7 +22,7 @@
     </table>
 
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" id="add_user" >
+    <button type="button" class="btn btn-primary" id="add_user">
         Add user
     </button>
 
@@ -105,7 +105,7 @@
                     {
                         "data": null,
                         "defaultContent": '<button type="button" id="edit" data-id="id" class="btn btn-warning">Edit</button>' + '&nbsp;&nbsp' +
-                            '<button type="button" id="remove" class="btn btn-danger">Remove</button>'
+                        '<button type="button" id="remove" class="btn btn-danger">Remove</button>'
                     }
                 ],
             });
@@ -114,8 +114,8 @@
             $('#save').click(function () {
                 var method = 'POST';
                 var url = `/api_auth/user/`;
+
                 if ($('#save').attr('data-action') === 'edit') {
-                    console.log('Here is PUT!!!');
                     method = 'PUT';
                     url += `${$('#user_id').val()}/`
                 }
@@ -132,19 +132,25 @@
                     dataType: 'json',
                     success: function (data) {
                         $("#exampleModal").modal("hide");
-                        table.ajax.reload(null,false);
+                        table.ajax.reload(null, false);
                     }
                 })
             });
 
             $('#add_user').on('click', function () {
-                $('#save').attr('data-action','add');
+                $('#save').attr('data-action', 'add');
+                $('#first_name').val('');
+                $('#last_name').val('');
+                $('#email').val('');
+                $('#company').val('');
+                $('#user_id').val('');
+                $('#modal_title').text('ADD');
                 $("#exampleModal").modal("show");
             });
 
             // EDIT
             table.on('click', '#edit', function (event) {
-                $('#save').attr('data-action','edit');
+                $('#save').attr('data-action', 'edit');
                 var data = table.row($(this).parents('tr')).data();
                 $('#first_name').val(data['first_name']);
                 $('#last_name').val(data['last_name']);
@@ -164,7 +170,7 @@
                     data: {},
                     dataType: 'json',
                     success: function (data) {
-                        table.ajax.reload(null,false);
+                        table.ajax.reload(null, false);
                     }
                 })
             })

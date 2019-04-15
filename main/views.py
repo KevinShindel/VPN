@@ -1,14 +1,9 @@
-import datetime
-import random
-
-from django.db.models import Max
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from .models import User,Company,Transfer
 from rest_framework import viewsets, status
 from .serializers import *
+from .models import User, Company, Transfer
 
 
 # Functions View
@@ -27,15 +22,10 @@ def company(request):
 def transfer(request):
     return render(request, 'transfer.html')
 
-    # Random user
-    # max_id = User.objects.all().aggregate(max_id=Max('id'))['max_id']
-    # pk = random.randint(1, max_id)
-    # rand_user = User.objects.get(pk=pk)
-    # print(rand_user)
 
-
-# REST api end-points
-class UserViewSet(APIView):
+class UserViewSet(viewsets.ModelViewSet,APIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
     def get(self, request):
         queryset = User.objects.all()
@@ -56,15 +46,12 @@ class UserViewSet(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-
-
 class CompanyViewSet(viewsets.ModelViewSet, APIView):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
 
     def update(self, request, pk=None):
         pass
-
 
 
 class TransferViewSet(viewsets.ModelViewSet, APIView):
