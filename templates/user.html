@@ -7,6 +7,7 @@
             <th>Last Name</th>
             <th>Email</th>
             <th>Company</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tfoot>
@@ -15,53 +16,158 @@
             <th>Last Name</th>
             <th>Email</th>
             <th>Company</th>
+            <th>Action</th>
         </tr>
         </tfoot>
     </table>
 
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" id="add_user" >
+        Add user
+    </button>
+
+
+    <!-- Add and Edit -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add new user</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" hidden id="user_id">
+                    <div class="container ">
+                        <span class="input-group-addon">First name</span>
+                        <input type="text" id="first_name" class="form-control">
+
+                        <span class="input-group-addon">Last name</span>
+                        <input type="text" id="last_name" class="form-control">
+
+                        <span class="input-group-addon">Email</span>
+                        <input type="text" id="email" class="form-control">
+
+                        <span class="input-group-addon">Company</span>
+                        <input type="text" id="company" class="form-control">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="save">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="confirm" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Are you sure?</h4>
+                </div>
+                <div class="modal-body">
+                    <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Delete</button>
+                    <button type="button" data-dismiss="modal" class="btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     <script>
-        var first_name = faker.name.firstName();
-        var last_name = faker.name.lastName();
-        var email = faker.internet.email();
-        var company = faker.company.companyName();
-        var company_quote = faker.random.number({min:75,max:200});
-
-        console.log('First name: ' + first_name + ' Last name: ' + last_name + ' Email: ' + email+' Company: '+company+' Quote number: '+company_quote);
-
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#myInput').trigger('focus')
+        })
     </script>
+
 
     <script>
         $(document).ready(function () {
-            var editor;
-            editor = new $.fn.dataTable.Editor({
-                ajax: '/api_auth/transfer/',
-                table: '#myTable',
-                idSrc:  'id',
-                fields: [
-                    {label: 'First name', name: 'first_name'},
-                    {label: 'Last name', name: 'last_name'},
-                    {label: 'Email', name: 'email'},
-                    {label: 'Company', name: 'company'},
-                ]
-            });
 
             var table = $('#myTable').DataTable({
-                "serverSide": true,
-                "ajax": "/api_auth/user/?format=datatables",
-                dom: 'Bfrtip',
-                "columns": [
+                serverSide: true,
+                ajax: {
+                    url: "/api_auth/user/?format=datatables",
+                    contentType: 'application/json',
+                },
+                columns: [
                     {"data": "first_name"},
                     {"data": "last_name"},
                     {"data": "email"},
-                    {"data": "company"},
+                    {"data": "company_name"},
+                    {
+                        "data": null,
+                        "defaultContent": '<button type="button" id="edit" data-id="id" class="btn btn-warning">Edit</button>' + '&nbsp;&nbsp' +
+                            '<button type="button" id="remove" class="btn btn-danger">Remove</button>'
+                    }
                 ],
-                select: true,
-                buttons: [
-                    {extend: 'create', editor: editor},
-                    {extend: 'edit', editor: editor},
-                    {extend: 'remove', editor: editor}
-                ]
             });
+
+            // SAVE
+            $('#save').click(function () {
+                var method = 'POST';
+                var url = `/api_auth/user/`;
+                if ($('#save').attr('data-action') === 'edit') {
+                    console.log('Here is PUT!!!');
+                    method = 'PUT';
+                    url += `${$('#user_id').val()}/`
+                }
+                $.ajax({
+                    type: method,
+                    url: url,
+                    data: {
+                        'first_name': $('#first_name').val(),
+                        'last_name': $('#last_name').val(),
+                        'email': $('#email').val(),
+                        'company': $('#company').val(),
+                        'id': $('#user_id').val(),
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#exampleModal").modal("hide");
+                        table.ajax.reload(null,false);
+                    }
+                })
+            });
+
+            $('#add_user').on('click', function () {
+                $('#save').attr('data-action','add');
+                $("#exampleModal").modal("show");
+            });
+
+            // EDIT
+            table.on('click', '#edit', function (event) {
+                $('#save').attr('data-action','edit');
+                var data = table.row($(this).parents('tr')).data();
+                $('#first_name').val(data['first_name']);
+                $('#last_name').val(data['last_name']);
+                $('#email').val(data['email']);
+                $('#company').val(data['company']);
+                $('#user_id').val(data['id']);
+                $('#modal_title').text('EDIT');
+                $("#exampleModal").modal("show");
+            });
+
+            // DELETE
+            table.on('click', '#remove', function (event) {
+                var data = table.row($(this).parents('tr')).data();
+                $.ajax({
+                    type: 'DELETE',
+                    url: `/api_auth/user/${data['id']}`,
+                    data: {},
+                    dataType: 'json',
+                    success: function (data) {
+                        table.ajax.reload(null,false);
+                    }
+                })
+            })
         });
     </script>
 
