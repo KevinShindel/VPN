@@ -18,42 +18,61 @@
         $(document).ready(function () {
             var editor;
             var url_path = '/api_auth/company/';
-
             editor = new $.fn.dataTable.Editor({
                 ajax: {
-                    dataSrc: "",
-                    dataType: "json",
-                    contentType: "application/json; charset=utf-8",
-                    url: url_path,
-                    data: function (d) {
-                         var newdata;
-                                $.each(d.data, function (key, value) {
-                                    newdata = JSON.stringify(value);
-                                });
-                                return newdata;
-                    //{#return JSON.stringify(ownData)#}
+                    create: {
+                        type: "POST",
+                        dataSrc: "",
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        url: url_path,
+                        data: function (d) {
+                            var newdata;
+                            $.each(d.data, function (key, value) {
+                                newdata = JSON.stringify(value);
+                            });
+                            return newdata;
+                        },
+
+
                     },
-                }, create: {
-                    type: "POST",
-                    url: url_path
-                },
-                edit: {
-                    type: "PUT",
-                    url: url_path + "/_id_"
-                },
-                remove: {
-                    type: "DELETE",
-                    url: url_path + "/_id_"
-                },
+                    edit: {
+                        type: "PUT",
+                        url: url_path + "_id_/",
+                        dataSrc: "",
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        data: function (d) {
+                            var newdata;
+                            $.each(d.data, function (key, value) {
+                                newdata = JSON.stringify(value);
+                            });
+                            return newdata;
+                        },
+                    },
+                    remove: {
+                        type: "DELETE",
+                        url: url_path + "_id_/",
+                        dataSrc: "",
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        data: function (d) {
+                            var newdata;
+                            $.each(d.data, function (key, value) {
+                                newdata = JSON.stringify(value);
+                            });
+                            return newdata;
+                        },
+                    }
+                    },
+                    table: '#myTable',
+                    idSrc: 'id',
+                    fields: [
+                        {label: 'Name', name: 'name'},
+                        {label: 'Quote', name: 'quote'},
+                    ]
 
-
-                table: '#myTable',
-                idSrc:  'id',
-                fields: [
-                    {label: 'Name', name: 'name'},
-                    {label: 'Quote', name: 'quote'},
-                ]
-            });
+                });
 
             var table = $('#myTable').DataTable({
                 "serverSide": true,
