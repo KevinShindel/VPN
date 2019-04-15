@@ -20,6 +20,7 @@
             editor = new $.fn.dataTable.Editor({
                 ajax: '/api_auth/transfer/?format=datatables',
                 table: '#myTable',
+                idSrc:  'id',
                 fields: [
                     {label: 'Name', name: 'name'},
                     {label: 'Quote', name: 'quote'},

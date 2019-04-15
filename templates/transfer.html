@@ -18,36 +18,33 @@
         </tr>
         </tfoot>
     </table>
+    <div class="container">
+    <div class="btn-group">
+        <select name="" id="" class="btn btn-outline-warning">
+            <option value="">January</option>
+            <option value="">February</option>
+            <option value="">March</option>
+            <option value="">April</option>
+            <option value="">May</option>
+            <option value="">June</option>
+            <option value="">Jule</option>
+            <option value="">December</option>
+        </select>
+        <div class="btn btn-default">Show report</div>
+        <div class="btn btn-success">Generate data</div>
+    </div>
+    </div>
 
     <script>
         $(document).ready(function () {
-            var editor;
-            editor = new $.fn.dataTable.Editor({
-                ajax: '/api_auth/transfer/',
-                table: '#myTable',
-                fields: [
-                    {label: 'User', name: 'user'},
-                    {label: 'Date', name: 'date'},
-                    {label: 'Resource', name: 'resource'},
-                    {label: 'Traffic', name: 'traffic'},
-                ]
-            });
-
             var table = $('#myTable').DataTable({
                 "serverSide": true,
                 "ajax": "/api_auth/transfer/?format=datatables",
-                dom: 'Bfrtip',
                 "columns": [
                     {"data": "user"},
                     {"data": "date"},
                     {"data": "resource"},
                     {"data": "traffic"},
-                ],
-                select: true,
-                buttons: [
-                    {extend: 'create', editor: editor},
-                    {extend: 'edit', editor: editor},
-                    {extend: 'remove', editor: editor}
                 ]
             });
         });
