@@ -9,6 +9,7 @@ router = routers.DefaultRouter()
 router.register(r'user', UserViewSet)
 router.register(r'company', CompanyViewSet)
 router.register(r'transfer', TransferViewSet)
+router.register(r'abusers', AbusersViewSet)
 
 urlpatterns = [
 
@@ -21,6 +22,7 @@ urlpatterns = [
     path('user/', user, name='user'),
     path('company/', company, name='company'),
     path('transfer/', transfer, name='transfer'),
+    path('abusers/', abusers, name='abusers'),
 
     # REST API URL
     path('api_auth/', include(router.urls)),

@@ -18,30 +18,9 @@
         </tr>
         </tfoot>
     </table>
-    <div class="container">
-        <div class="btn-group">
-            <select name="" id="report_date" class="btn btn-primary">
-                <option value="1">January</option>
-                <option value="2">February</option>
-                <option value="3">March</option>
-                <option value="4">April</option>
-                <option value="5">May</option>
-                <option value="6">June</option>
-                <option value="7">Jule</option>
-                <option value="8">August</option>
-                <option value="9">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
-            </select>
-            <button class="btn btn-secondary" name='show_report' id="show_report" value="show">Show report</button>
-            <button class="btn btn-success" name='generate_report' id="generate_report" value="generate">Generate data</button>
-        </div>
-    </div>
 
     <script>
         $(document).ready(function () {
-
              var table = $('#myTable').DataTable({
                 "serverSide": true,
                 "ajax": "/api_auth/transfer/?format=datatables",
@@ -52,51 +31,6 @@
                     {"data": "traffic"},
                 ]
             });
-
-            var date = $('#report_date').val()
-
-            $('#report_date').change(function () {
-                date = $('#report_date').val()
-            })
-
-            $('#show_report').click(function () {
-                var status = $(this).val()
-                $.ajax({
-                    url: '/api_auth/transfer/',
-                    data: {
-                        date:date,
-                        status: status,
-                    },
-                    dataType: 'json',
-                      success: function () {
-                        //just update a table
-                        table.draw()
-
-                    }
-                });
-
-            })
-
-            $('#generate_report').click(function () {
-                var status = $(this).val()
-                $.ajax({
-                    url: '/api_auth/transfer/',
-                    data: {
-                        date:date,
-                        status: status,
-                    },
-                    dataType: 'json',
-                    success: function () {
-
-                        //show datatable report
-
-
-                    }
-                });
-            })
-
-
-
         });
     </script>
 {% endblock %}

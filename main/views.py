@@ -12,7 +12,7 @@ def main(request):
 
 
 def user(request):
-    return render(request, 'user.html')
+    return render(request, 'user.html', context={"companies": Company.objects.all()})
 
 
 def company(request):
@@ -21,6 +21,10 @@ def company(request):
 
 def transfer(request):
     return render(request, 'transfer.html')
+
+
+def abusers(request):
+    return render(request, 'abusers.html')
 
 
 class UserViewSet(viewsets.ModelViewSet,APIView):
@@ -33,13 +37,11 @@ class UserViewSet(viewsets.ModelViewSet,APIView):
         return Response(serializer.data)
 
     def put(self, request):
-        print(request.data)
         serializer = UserSerializer(request.data)
         User.objects.get(id=serializer['id']).update(**serializer)
         return Response(status=status.HTTP_200_OK)
 
     def post(self, request):
-        print(request.data)
         serializer = UserSerializer(request.data)
         if serializer.is_valid():
             serializer.save()
@@ -50,8 +52,8 @@ class CompanyViewSet(viewsets.ModelViewSet, APIView):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
 
-    def update(self, request, pk=None):
-        pass
+    # def update(self, request, pk=None):
+    #     pass
 
 
 class TransferViewSet(viewsets.ModelViewSet, APIView):
@@ -62,3 +64,7 @@ class TransferViewSet(viewsets.ModelViewSet, APIView):
         print(request.data)
         return Response(status=status.HTTP_200_OK)
 
+
+class AbusersViewSet(viewsets.ModelViewSet, APIView):
+    queryset = Company.objects.all()
+    serializer_class = AbuserSerializer
