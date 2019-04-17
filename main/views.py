@@ -1,12 +1,17 @@
+import json
+
+from django.db.models import Sum
+from django.http.response import HttpResponse
 from django.shortcuts import render
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import viewsets, status
-from .serializers import *
+
+from main.utils import DataGenerator
 from .models import User, Company, Transfer
+from .serializers import *
 
 
-# Functions View
 def main(request):
     return render(request, 'index.html')
 
@@ -27,7 +32,28 @@ def abusers(request):
     return render(request, 'abusers.html')
 
 
-class UserViewSet(viewsets.ModelViewSet,APIView):
+def report(request):
+    result = []
+    report_date = request.GET.get('month', '')
+    for company in Company.objects.all():
+        users_traffic = Transfer.objects.filter(
+                                                user__company=company,
+                                                date__month=report_date,).aggregate(sum=Sum('traffic'))
+        if users_traffic['sum'] and users_traffic['sum'] > company.quote:
+            result.append({
+                'name': company.name,
+                'traffic': users_traffic['sum'],
+                'quote': company.quote
+            })
+    return HttpResponse(json.dumps({'data': result, 'count': len(result)}))
+
+
+def generate(request):
+    DataGenerator().process()
+    return HttpResponse(json.dumps({'status': True}))
+
+
+class UserViewSet(viewsets.ModelViewSet, APIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -52,19 +78,8 @@ class CompanyViewSet(viewsets.ModelViewSet, APIView):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
 
-    # def update(self, request, pk=None):
-    #     pass
-
 
 class TransferViewSet(viewsets.ModelViewSet, APIView):
     queryset = Transfer.objects.all()
     serializer_class = TransferSerializer
 
-    def post(self, request):
-        print(request.data)
-        return Response(status=status.HTTP_200_OK)
-
-
-class AbusersViewSet(viewsets.ModelViewSet, APIView):
-    queryset = Company.objects.all()
-    serializer_class = AbuserSerializer

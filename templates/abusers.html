@@ -1,22 +1,8 @@
 {% extends 'layout.html' %}
+{% load static %}
 {% block content %}
-    <table id='myTable' class='display table table-striped'>
-        <thead>
-        <tr>
-            <th>Company</th>
-            <th>Used</th>
-            <th>Quota</th>
-        </tr>
-        </thead>
-        <tfoot>
-        <tr class='text-muted'>
-            <th>Company</th>
-            <th>Used</th>
-            <th>Quota</th>
-        </tr>
-        </tfoot>
-    </table>
     <div class="container">
+        <h4>Abusers control panel</h4>
         <div class="btn-group">
             <select name="" id="report_date" class="btn btn-primary">
                 <option value="1">January</option>
@@ -32,68 +18,43 @@
                 <option value="11">November</option>
                 <option value="12">December</option>
             </select>
-            <button class="btn btn-secondary" name='show_report' id="show_report" value="show">Show report</button>
-            <button class="btn btn-success" name='generate_report' id="generate_report" value="generate">Generate data</button>
+            <button class="btn btn-secondary" name='show_report' id="show_report" value="show" data-toggle="modal"
+                    data-target="#myModal">Show report
+            </button>
+            <button class="btn btn-success" name='generate_report' id="generate_report" value="generate">Generate data
+            </button>
         </div>
     </div>
-
-    <script>
-        $(document).ready(function () {
-
-             var table = $('#myTable').DataTable({
-                "serverSide": true,
-                "ajax": "/api_auth/abusers/?format=datatables",
-                "columns": [
-                    {"data": "company.name", 'name': 'company.name'},
-                    {"data": "trafic"},
-                    {"data": "company.quota", 'name': 'company.quota'},
-                ]
-            });
-
-            var date = $('#report_date').val()
-
-            $('#report_date').change(function () {
-                date = $('#report_date').val()
-            })
-
-            $('#show_report').click(function () {
-                var status = $(this).val()
-                $.ajax({
-                    url: '/api_auth/transfer/',
-                    data: {
-                        date:date,
-                        status: status,
-                    },
-                    dataType: 'json',
-                      success: function () {
-                        //just update a table
-                        table.draw()
-
-                    }
-                });
-
-            })
-
-            $('#generate_report').click(function () {
-                var status = $(this).val()
-                $.ajax({
-                    url: '/api_auth/transfer/',
-                    data: {
-                        date:date,
-                        status: status,
-                    },
-                    dataType: 'json',
-                    success: function () {
-
-                        //show datatable report
-
-
-                    }
-                });
-            })
-
-
-
-        });
-    </script>
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modal_title">Abusers Report</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped table-bordered table-condensed" id="myTable">
+                        <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Used</th>
+                            <th>Quota</th>
+                        </tr>
+                        </thead>
+                        <tfoot class="text-muted">
+                        <tr>
+                            <th>Company</th>
+                            <th>Used</th>
+                            <th>Quota</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/abusers.js' %}"></script>
 {% endblock %}

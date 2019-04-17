@@ -26,4 +26,4 @@ class Transfer(models.Model):
     traffic = models.IntegerField(verbose_name='Transfer')
 
     def __str__(self):
-        return self.user
+        return self.user.first_name

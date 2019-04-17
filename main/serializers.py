@@ -1,5 +1,5 @@
-# REST FRAMEWORK
 from rest_framework import serializers
+
 from .models import *
 
 
@@ -25,7 +25,6 @@ class UserSerializer(serializers.ModelSerializer):
     company_name = serializers.ReadOnlyField(source='company.name')
     DT_RowID = serializers.SerializerMethodField()
     DT_RowAttr = serializers.SerializerMethodField()
-
 
     def get_DT_RowID(self, user):
         return 'row_%d' % user.pk
@@ -55,23 +54,4 @@ class TransferSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transfer
         fields = ('id', 'user_name', 'user', 'date', 'resource', 'traffic', 'DT_RowID', 'DT_RowAttr')
-        datatables_always_serialize = ('id',)
-
-
-class AbuserSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
-    company = CompanySerializer()
-    company_name = serializers.ReadOnlyField(source='company.name')
-    DT_RowID = serializers.SerializerMethodField()
-    DT_RowAttr = serializers.SerializerMethodField()
-
-    def get_DT_RowID(self, abusers):
-        return 'row_%d' % abusers.pk
-
-    def get_DT_RowAttr(self, abusers):
-        return {'data_pk': abusers.pk}
-
-    class Meta:
-        model = Transfer
-        fields = ('id', 'company', 'company_name', 'traffic', 'DT_RowID', 'DT_RowAttr')
         datatables_always_serialize = ('id',)
