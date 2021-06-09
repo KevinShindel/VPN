@@ -1,5 +1,5 @@
 dataclasses==0.6
-Django==2.2.10
+Django==2.2.22
 django-filter==2.1.0
 django-stubs==0.12.0
 djangorestframework==3.9.2
