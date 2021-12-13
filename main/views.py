@@ -64,7 +64,7 @@ class UserViewSet(viewsets.ModelViewSet, APIView):
 
     def put(self, request):
         serializer = UserSerializer(request.data)
-        User.objects.get(id=serializer['id']).update(**serializer)
+        User.objects.get(id=serializer['id']).update(**serializer.data)
         return Response(status=status.HTTP_200_OK)
 
     def post(self, request):

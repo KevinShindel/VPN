@@ -37,19 +37,19 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" hidden id="user_id">
+                    <input type="text" hidden id="user_id" aria-label="">
                     <div class="container ">
                         <span class="input-group-addon">First name</span>
-                        <input type="text" id="first_name" class="form-control">
+                        <input type="text" id="first_name" class="form-control" aria-label="">
 
                         <span class="input-group-addon">Last name</span>
-                        <input type="text" id="last_name" class="form-control">
+                        <input type="text" id="last_name" class="form-control" aria-label="">
 
                         <span class="input-group-addon">Email</span>
-                        <input type="text" id="email" class="form-control">
+                        <input type="text" id="email" class="form-control" aria-label="">
 
                         <span class="input-group-addon">Company</span>
-                        <select name="Company" id="company" class="form-control">
+                        <select name="Company" id="company" class="form-control" aria-label="">
                             {% for company in companies %}
                                 <option value="{{ company.id }}">{{ company.name }}</option>
                             {% endfor %}
