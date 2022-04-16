@@ -8,7 +8,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from main.utils import DataGenerator
-from .models import User, Company, Transfer
 from .serializers import *
 
 

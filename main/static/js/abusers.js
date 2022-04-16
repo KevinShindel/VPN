@@ -1,11 +1,12 @@
 $(document).ready(function () {
 
     $("#show_report").click(function () {
-        var title = $("#report_date option:selected").text() + ' Abusers report'
-        var month = $("#report_date option:selected").val()
+        let query = $("#report_date option:selected")
+        let title = query.text() + ' Abusers report'
+        let month = query.val()
         $("#modal_title").text(title)
 
-        var table = $('#myTable').DataTable({
+        $('#myTable').DataTable({
             serverSide: false,
             ajax: {
                 url: "/abusers/report/",

@@ -2,7 +2,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = os.getenv('SECRET_KEY', None)
+SECRET_KEY = '_#cm-co)a3=9djux(xh(c&!1u+@^&@2k9xr8%4)+fqba@%7ij6'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 DEBUG = True

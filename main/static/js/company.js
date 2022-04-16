@@ -1,7 +1,6 @@
 $(document).ready(function () {
-    var editor;
-    var url_path = '/api_auth/company/';
-    editor = new $.fn.dataTable.Editor({
+    let url_path = '/api_auth/company/';
+    let editor = new $.fn.dataTable.Editor({
         ajax: {
             create: {
                 type: "POST",
@@ -10,13 +9,13 @@ $(document).ready(function () {
                 contentType: "application/json; charset=utf-8",
                 url: url_path,
                 data: function (d) {
-                    var newdata;
+                    let new_data;
                     $.each(d.data, function (key, value) {
-                        newdata = JSON.stringify(value);
+                        new_data = JSON.stringify(value);
                     });
-                    return newdata;
+                    return new_data;
                 },
-                success: function (data) {
+                success: ()=> {
                     $('#myTable').DataTable().ajax.reload();
                 },
             },
@@ -27,13 +26,13 @@ $(document).ready(function () {
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 data: function (d) {
-                    var newdata;
+                    let new_data;
                     $.each(d.data, function (key, value) {
-                        newdata = JSON.stringify(value);
+                        new_data = JSON.stringify(value);
                     });
-                    return newdata;
+                    return new_data;
                 },
-                success: function (data) {
+                success: ()=> {
                     $('#myTable').DataTable().ajax.reload();
                 },
             },
@@ -44,13 +43,13 @@ $(document).ready(function () {
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 data: function (d) {
-                    var newdata;
+                    let new_data;
                     $.each(d.data, function (key, value) {
-                        newdata = JSON.stringify(value);
+                        new_data = JSON.stringify(value);
                     });
-                    return newdata;
+                    return new_data;
                 },
-                success: function (data) {
+                success: ()=> {
                     $('#myTable').DataTable().ajax.reload();
                 },
             }
@@ -64,7 +63,7 @@ $(document).ready(function () {
 
     });
 
-    var table = $('#myTable').DataTable({
+    $('#myTable').DataTable({
         "serverSide": true,
         "ajax": "/api_auth/company/?format=datatables",
         dom: 'Bfrtip',

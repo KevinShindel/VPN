@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    var table = $('#myTable').DataTable({
+    $('#myTable').DataTable({
         "serverSide": true,
         "ajax": "/api_auth/transfer/?format=datatables",
         "columns": [
