@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     $('#myTable').DataTable({
         "serverSide": true,
         "ajax": "/api_auth/transfer/?format=datatables",
@@ -9,4 +10,5 @@ $(document).ready(function () {
             {"data": "traffic"},
         ]
     });
+
 });

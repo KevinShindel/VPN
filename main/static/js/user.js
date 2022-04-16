@@ -4,6 +4,9 @@ $('#myModal').on('shown.bs.modal', function () {
 
 
 $(document).ready(function () {
+    let userId = $('#user_id');
+    let company = $('#company')
+
 
     let table = $('#myTable').DataTable({
         serverSide: true,
@@ -25,14 +28,14 @@ $(document).ready(function () {
     });
 
     // SAVE
-    $('#save').click(function () {
+    $('#save').click(()=> {
         let method = 'POST';
         let url = `/api_auth/user/`;
-        let userId = $('#user_id');
+
 
         if ($('#save').attr('data-action') === 'edit') {
             method = 'PUT';
-            url += `${$('#user_id').val()}/`
+            url += `${userId}.val()}/`
         }
         $.ajax({
             type: method,
@@ -52,48 +55,48 @@ $(document).ready(function () {
         })
     });
 
-    $('#add_user').on('click', function () {
+    $('#add_user').on('click', ()=> {
         $('#save').attr('data-action', 'add');
         $('#first_name').val('');
         $('#last_name').val('');
         $('#email').val('');
         $('#company').val('');
-        $('#user_id').val('');
+        userId.val('');
         $('#modal_title').text('ADD');
         $("#exampleModal").modal("show");
     });
 
     // EDIT
-    table.on('click', '#edit', function (event) {
+    table.on('click', '#edit', ()=> {
         $('#save').attr('data-action', 'edit');
         let data = table.row($(this).parents('tr')).data();
         $('#first_name').val(data['first_name']);
         $('#last_name').val(data['last_name']);
         $('#email').val(data['email']);
-        $('#company').val(data['company.id']);
-        $('#company').text(data['company.name']);
-        user.val(data['id']);
+        company.val(data['company.id']);
+        company.text(data['company.name']);
+        userId.val(data['id']);
         $('#modal_title').text('EDIT');
         $("#exampleModal").modal("show");
     });
 
     // DELETE
-    table.on('click', '#remove', function (event) {
+    table.on('click', '#remove', ()=> {
         let data = table.row($(this).parents('tr')).data();
         $.ajax({
             type: 'DELETE',
             url: `/api_auth/user/${data['id']}`,
             data: {},
             dataType: 'json',
-            success: function (data) {
-                table.ajax.reload(null, false);
+            success: ()=> {
+                table.ajax.reload();
             }
         })
     });
 
     let options = [];
 
-    $('#company').find('option').each(function () {
+    company.find('option').each(function () {
         options.push($(this).val());
     });
 

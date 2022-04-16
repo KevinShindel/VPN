@@ -1,76 +1,59 @@
-import json
-
 from django.db.models import Sum
-from django.http.response import HttpResponse
-from django.shortcuts import render
-from rest_framework import viewsets, status
-from rest_framework.response import Response
+from django.http.response import JsonResponse
+from django.views.generic import TemplateView
+from django.views.generic.base import ContextMixin
+from rest_framework import viewsets
 from rest_framework.views import APIView
 
 from main.utils import DataGenerator
 from .serializers import *
 
 
-def main(request):
-    return render(request, 'index.html')
+class MainView(TemplateView):
+    template_name = 'index.html'
 
 
-def user(request):
-    return render(request, 'user.html', context={"companies": Company.objects.all()})
+class UserView(TemplateView, ContextMixin):
+    template_name = 'user.html'
+    extra_context = {"companies": Company.objects.all()}
 
 
-def company(request):
-    return render(request, 'company.html')
+class CompanyView(TemplateView):
+    template_name = 'company.html'
 
 
-def transfer(request):
-    return render(request, 'transfer.html')
+class TransferView(TemplateView):
+    template_name = 'transfer.html'
 
 
-def abusers(request):
-    return render(request, 'abusers.html')
+class AbusersView(TemplateView):
+    template_name = 'abusers.html'
 
 
 def report(request):
     result = []
     report_date = request.GET.get('month', '')
-    for company in Company.objects.all():
-        users_traffic = Transfer.objects.filter(
-                                                user__company=company,
-                                                date__month=report_date,).aggregate(sum=Sum('traffic'))
-        if users_traffic['sum'] and users_traffic['sum'] > company.quote:
+    for company_item in Company.objects.all().values('id', 'quote', 'name'):
+        users_traffic = Transfer.objects.filter(user__company_id=company_item['id'],
+                                                date__month=report_date).\
+                                         aggregate(sum=Sum('traffic'))
+        if users_traffic['sum'] and users_traffic['sum'] > company_item['quote']:
             result.append({
-                'name': company.name,
+                'name': company_item['name'],
                 'traffic': users_traffic['sum'],
-                'quote': company.quote
+                'quote': company_item['quote']
             })
-    return HttpResponse(json.dumps({'data': result, 'count': len(result)}))
+    return JsonResponse({'data': result, 'count': len(result)})
 
 
 def generate(request):
     DataGenerator().process()
-    return HttpResponse(json.dumps({'status': True}))
+    return JsonResponse({'status': True})
 
 
 class UserViewSet(viewsets.ModelViewSet, APIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
-    def get(self, request):
-        queryset = User.objects.all()
-        serializer = UserSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def put(self, request):
-        serializer = UserSerializer(request.data)
-        User.objects.get(id=serializer['id']).update(**serializer.data)
-        return Response(status=status.HTTP_200_OK)
-
-    def post(self, request):
-        serializer = UserSerializer(request.data)
-        if serializer.is_valid():
-            serializer.save()
-        return Response(status=status.HTTP_200_OK)
 
 
 class CompanyViewSet(viewsets.ModelViewSet, APIView):

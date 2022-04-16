@@ -1,7 +1,6 @@
-Django==2.2
-django-filter==2.1.0
-djangorestframework==3.9.2
-djangorestframework-stubs==0.4.2
-Markdown==3.1
-pytz==2018.9
-sqlparse==0.3.0
+asgiref==3.5.0
+Django==4.0.4
+djangorestframework==3.13.1
+djangorestframework-datatables==0.7.0
+pytz==2022.1
+sqlparse==0.4.2

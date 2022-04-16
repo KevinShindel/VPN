@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import *
+from .models import Company, User, Transfer
 
 
 class CompanySerializer(serializers.ModelSerializer):
@@ -44,6 +44,10 @@ class TransferSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     DT_RowID = serializers.SerializerMethodField()
     DT_RowAttr = serializers.SerializerMethodField()
+    date = serializers.SerializerMethodField()
+
+    def get_date(self, transfer: Transfer):
+        return transfer.date.strftime('%c')
 
     def get_DT_RowID(self, transfer):
         return 'row_%d' % transfer.pk
